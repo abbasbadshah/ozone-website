@@ -84,7 +84,9 @@ h6,
     top: -150px;
     transition: .5s;
 }
-
+.fa-3x{
+    font-size: 3rem !important;
+}
 .navbar {
     padding: 11px 0 !important;
     height: 75px;
@@ -537,4 +539,17 @@ h6,
     margin-right: 0;
     padding-right: 0;
     border-right: none;
+}
+
+/* tech */
+.tech-item {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.tech-item:hover {
+    background-color: #1363C6;
+}
+.tech-item:hover i,
+.tech-item:hover h5 {
+    color: #fff !important;
 }
