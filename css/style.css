@@ -553,3 +553,7 @@ h6,
 .tech-item:hover h5 {
     color: #fff !important;
 }
+.icon-box{
+    display: flex;
+    align-items: baseline;
+}
