@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Image Slider with Fade Animation</title>
+    <style>
+
+        .slider-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 650px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 15%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7);
+            left: 85%;
+            transition: opacity 0.5s ease; /* Add fade transition */
+            opacity: 0; /* Start with 0 opacity */
+        }
+
+        .slide.active {
+            width: 50%;
+            left: 25%;
+            z-index: 2;
+            filter: brightness(1);
+            opacity: 1; /* Full opacity for active slide */
+        }
+
+        .slide.prev {
+            width: 25%;
+            left: -1%;
+            z-index: 1;
+            opacity: 1; /* Show prev slide */
+        }
+
+        .slide.next {
+            width: 25%;
+            right: -1%;
+            left: auto;
+            z-index: 1;
+            opacity: 1; /* Show next slide */
+        }
+
+        .slide-text {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 999;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            opacity: 0; /* Hide text by default */
+            transition: opacity 0.5s ease; /* Fade in/out for text */
+        }
+
+        .slide.active .slide-text {
+            opacity: 1; /* Show text only for active slide */
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3%;
+            z-index: 999;
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: #FF5400;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            border-radius: 50%;
+            border: 2px solid #FF5400;
+            margin: 0 20px;
+            text-align: center;
+        }
+
+        .arrow.next-arrow {
+            margin-right: 35%;
+        }
+
+        .arrow:hover {
+            background-color: #FF5400;
+            color: #fff;
+        }
+
+        .dots {
+            display: flex;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #bbb;
+            margin: 0 8px;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #FF5400;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slider-wrapper">
+        <div class="slider-container">
+            <div class="slide"
+                style="background-image: url('https://8007283.com/wp-content/uploads/2024/07/2e1ddbdd8de8305bb52b54c5ca27244e.jpeg');">
+                <div class="slide-text">Chakra Medical<br>and wellness center</div>
+            </div>
+            <div class="slide"
+                style="background-image: url('https://8007283.com/wp-content/uploads/2024/07/79a2559a25fb46d476edb1e6940fd778-scaled.jpeg');">
+                <div class="slide-text">Lake</div>
+            </div>
+            <div class="slide"
+                style="background-image: url('https://8007283.com/wp-content/uploads/2024/07/a489e8a927d67b0d53f486f85c35119c-scaled.jpeg');">
+                <div class="slide-text">Real Estate</div>
+            </div>
+            <div class="slide"
+                style="background-image: url('https://8007283.com/wp-content/uploads/2024/07/a7cde48ad9ea0a0879e442958c592d15-1-scaled.jpeg');">
+                <div class="slide-text">Finance</div>
+            </div>
+        </div>
+        <div class="navigation">
+            <div class="arrow prev-arrow">&#10094;</div>
+            <div class="dots"></div>
+            <div class="arrow next-arrow">&#10095;</div>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevArrow = document.querySelector('.prev-arrow');
+        const nextArrow = document.querySelector('.next-arrow');
+        const dotsContainer = document.querySelector('.dots');
+        let currentSlide = 0;
+        let autoplayInterval;
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                slide.className = 'slide'; // Reset classes
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index === (currentSlide - 1 + slides.length) % slides.length) {
+                    slide.classList.add('prev');
+                } else if (index === (currentSlide + 1) % slides.length) {
+                    slide.classList.add('next');
+                }
+            });
+            updateDots();
+        }
+
+        function updateDots() {
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => {
+                    currentSlide = index;
+                    updateSlides();
+                    resetAutoplay();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlides();
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+        }
+
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+
+        prevArrow.addEventListener('click', () => {
+            prevSlide();
+            resetAutoplay();
+        });
+
+        nextArrow.addEventListener('click', () => {
+            nextSlide();
+            resetAutoplay();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlides();
+            startAutoplay();
+        });
+    </script>
+</body>
+
+</html>
+<!-- helllo make changes -->
